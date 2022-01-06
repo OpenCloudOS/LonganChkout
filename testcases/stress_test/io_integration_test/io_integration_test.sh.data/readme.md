@@ -1,0 +1,1 @@
+需要下载准备好的镜像文件 `tlinux-64bit-v2.4.20200929.tar` 进行测试。下载链接：https://share.weiyun.com/vQloHzrt 密码：3r7wuc

@@ -111,6 +111,11 @@ docker ps
     - oom_test：内存压测。限制cgroup内存使用，不断申请内存。
     - stress_test：调度压测。测试bt调度算法及cfs调度算法，如果不支持bt调度，测试也不会失败。
 
+**io压测特别说明**
+需要下载镜像文件 `tlinux-64bit-v2.4.20200929.tar` 放在路径 `testcases/stress_test/io_integration_test/io_integration_test.sh.data/` 下。
+
+下载链接为：https://share.weiyun.com/vQloHzrt 密码：3r7wuc
+
 **net网络压测特别说明**
 
 可以使用net文件夹下提供的sshpass-1.06-2.tl2.x86_64.rpm，离线安装sshpass
