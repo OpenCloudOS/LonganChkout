@@ -1,0 +1,13 @@
+doio: doio.c ../src/global.h ../include/config.h doio.h \
+ ../include/pattern.h ../include/write_log.h ../include/random_range.h \
+ ../include/string_to_tokens.h
+fsstress: fsstress.c ../src/global.h ../include/config.h
+fsx: fsx.c ../src/global.h ../include/config.h
+growfiles: growfiles.c ../src/global.h ../include/config.h \
+ ../include/dataascii.h ../include/random_range.h ../include/databin.h \
+ ../include/open_flags.h ../include/forker.h ../include/file_lock.h \
+ ../include/tlibio.h
+iogen: iogen.c ../src/global.h ../include/config.h doio.h \
+ ../include/str_to_bytes.h ../include/string_to_tokens.h \
+ ../include/open_flags.h ../include/random_range.h
+aio-stress: aio-stress.c

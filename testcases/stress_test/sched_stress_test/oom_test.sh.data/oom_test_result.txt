@@ -1,0 +1,7 @@
+nohup: ignoring input
+JOB ID     : 09d80b6cd952fe2a097bbcfbc9279761cab028a5
+JOB LOG    : /root/avocado/job-results/job-2021-11-23T06.07-09d80b6/job.log
+ (1/1) oom_test.sh:  PASS (313.54 s)
+RESULTS    : PASS 1 | ERROR 0 | FAIL 0 | SKIP 0 | WARN 0 | INTERRUPT 0 | CANCEL 0
+JOB TIME   : 314.49 s
+JOB HTML   : /root/avocado/job-results/job-2021-11-23T06.07-09d80b6/results.html

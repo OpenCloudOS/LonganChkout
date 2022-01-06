@@ -1,0 +1,107 @@
+mem_leak: 0
+general: !mux
+    runltp: !mux
+        syscalls:
+            args: '-f syscalls'
+        mm:
+            args: '-f mm'
+        fs:
+            args: '-f fs'
+        fs_perms_simple:
+            args: '-f fs_perms_simple'
+        fsx:
+            args: '-f fsx'
+        dio:
+            args: '-f dio'
+        io:
+            args: '-f io'
+        ipc:
+            args: '-f ipc'
+        sched:
+            args: '-f sched'
+        math:
+            args: '-f math'
+        nptl:
+            args: '-f nptl'
+        pty:
+            args: '-f pty'
+        filecaps:
+            args: '-f filecaps'
+        cap_bounds:
+            args: '-f cap_bounds'
+        fs_bind:
+            args: '-f fs_bind'
+        fcntl-locktests:
+            args: '-f fcntl-locktests'
+        connectors:
+            args: '-f connectors'
+        timers:
+            args: '-f timers'
+        power_management_tests:
+            args: '-f power_management_tests'
+        hyperthreading:
+            args: '-f hyperthreading'
+        containers:
+            args: '-f containers'
+        controllers:
+            args: '-f controllers'
+        hugetlb:
+            args: '-f hugetlb'
+        numa:
+            args: '-f numa'
+        net-ipv6:
+            args: '-f net.ipv6'
+        net-ipv6_lib:
+            args: '-f net.ipv6_lib'
+        net-features:
+            args: '-f net.features'
+        net-rpc:
+            args: '-f net.rpc'
+        net-rpc_tests:
+            args: '-f net.rpc_tests'
+        net-tirpc_tests:
+            args: '-f net.tirpc_tests'
+        net_stress_appl:
+            args: '-f net_stress.appl'
+        net_stress_broken_ip:
+            args: '-f net_stress.broken_ip'
+        net_stress_interface:
+            args: '-f net_stress.interface'
+        net_stress_multicast:
+            args: '-f net_stress.multicast'
+        net_stress_route:
+            args: '-f net_stress.route'
+        uevent:
+            args: '-f uevent'
+        tracing:
+            args: '-f tracing'
+        syscalls-ipc:
+            args: '-f syscalls-ipc'
+        kernel_misc:
+            args: '-f kernel_misc'
+        thp-page-cache:
+            args: '-f mm'
+            tmpfs_mount_dir: '/mnt/thp/'
+        crypto:
+            args: '-f crypto'
+        cve:
+            args: '-f cve'
+        ima:
+            args: '-f ima'
+        net_stress.ipsec_dccp:
+            args: '-f net_stress.ipsec_dccp'
+        net_stress.ipsec_icmp:
+            args: '-f net_stress.ipsec_icmp'
+        net_stress.ipsec_sctp:
+            args: '-f net_stress.ipsec_sctp'
+        net_stress.ipsec_tcp:
+            args: '-f net_stress.ipsec_tcp'
+        net_stress.ipsec_udp:
+            args: '-f net_stress.ipsec_udp'
+        securebits:
+            args: '-f securebits'
+        tpm_tools:
+            args: '-f tpm_tools'
+        hugetlb_overcommit_False:
+            args: '-f hugetlb'
+            overcommit: False

@@ -1,0 +1,6 @@
+JOB ID     : d6268785a7ecb5fcf4707c3d3b11b02faf6717e1
+JOB LOG    : /root/avocado/job-results/job-2021-11-22T14.48-d626878/job.log
+ (1/1) test_docker_xfs.sh;run-07ed: PASS (181.63 s)
+RESULTS    : PASS 1 | ERROR 0 | FAIL 0 | SKIP 0 | WARN 0 | INTERRUPT 0 | CANCEL 0
+JOB TIME   : 181.79 s
+JOB HTML   : /root/avocado/job-results/job-2021-11-22T14.48-d626878/results.html

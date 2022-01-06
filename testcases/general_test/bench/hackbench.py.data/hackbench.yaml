@@ -1,0 +1,7 @@
+setup:
+ runargs : !mux
+  default :
+    num_groups: 10
+  stress:
+    num_groups: 50
+    iterations: 16

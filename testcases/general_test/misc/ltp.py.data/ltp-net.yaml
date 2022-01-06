@@ -1,0 +1,15 @@
+mem_leak: 0
+general: !mux
+  runltp: !mux
+      net-ipv6:
+          args: '-f net.ipv6'
+      net-ipv6_lib:
+          args: '-f net.ipv6_lib'
+      net-features:
+          args: '-f net.features'
+      net-rpc:
+          args: '-f net.rpc'
+      net-rpc_tests:
+          args: '-f net.rpc_tests'
+      net-tirpc_tests:
+          args: '-f net.tirpc_tests'

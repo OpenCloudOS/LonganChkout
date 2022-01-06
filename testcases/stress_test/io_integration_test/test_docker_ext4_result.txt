@@ -1,0 +1,6 @@
+JOB ID     : 55527c9f78f8184388f2989addea550d45ebef4e
+JOB LOG    : /root/avocado/job-results/job-2021-11-22T14.42-55527c9/job.log
+ (1/1) test_docker_ext4.sh;run-07ed: PASS (191.89 s)
+RESULTS    : PASS 1 | ERROR 0 | FAIL 0 | SKIP 0 | WARN 0 | INTERRUPT 0 | CANCEL 0
+JOB TIME   : 192.06 s
+JOB HTML   : /root/avocado/job-results/job-2021-11-22T14.42-55527c9/results.html

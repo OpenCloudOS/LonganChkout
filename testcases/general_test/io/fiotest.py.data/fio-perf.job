@@ -1,0 +1,15 @@
+; fio-perf.job
+
+[global]
+name=fio-sync
+numjobs=2*$ncpus
+rw=rw
+rwmixread=50
+rwmixwrite=50
+direct=0
+iodepth=1
+ioengine=psync
+bs=2m
+
+[job1]
+size=10g

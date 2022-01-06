@@ -1,0 +1,53 @@
+nohup: ignoring input
+# 本测试只取以下两组测试数据作为样例
+# 'TCP_RR 40 1 279696'
+# 'TCP_RR 40 1024 258447'
+check ip_2_addr netperf success
+check ip_3_addr netperf success
+check ip_1_addr netperf success
+check ip_1_addr ping success
+~~~~~~~[1/2]~~~~~~run netperf -H ip_1_addr -t TCP_RR  -l 120 -- -r 1,1~~~[17:26:17]~~~~~~~~~
+client(ip_2_addr) excutes netperf -H ip_1_addr -t TCP_RR  -l 120 -- -r 1,1 (40 threads)
+client(ip_3_addr) excutes netperf -H ip_1_addr -t TCP_RR  -l 120 -- -r 1,1 (40 threads)
+sampling data from ip_1_addr
+sampling data from ip_1_addr
+sampling data from ip_1_addr
+sampling data from ip_1_addr
+sampling data from ip_1_addr
+collecting data from server:
+289559.50 18945.72
+289398.00 18935.17
+289040.00 18911.74
+290104.50 18981.43
+289116.00 18916.74
+--------------------------------
+289444 18938.2
+~~~~~~~[2/2]~~~~~~run netperf -H ip_1_addr -t TCP_RR  -l 120 -- -r 1024,1024~~~[17:27:42]~~~~~~~~~
+client(ip_2_addr) excutes netperf -H ip_1_addr -t TCP_RR  -l 120 -- -r 1024,1024 (40 threads)
+client(ip_3_addr) excutes netperf -H ip_1_addr -t TCP_RR  -l 120 -- -r 1024,1024 (40 threads)
+sampling data from ip_1_addr
+sampling data from ip_1_addr
+sampling data from ip_1_addr
+sampling data from ip_1_addr
+sampling data from ip_1_addr
+collecting data from server:
+265970.50 283103.10
+269768.50 287149.89
+270913.50 288367.68
+270023.00 287422.32
+269500.00 286864.58
+--------------------------------
+269235 286582
+test result:
+ip_2_addr-info:
+cpu,mem(MB),driver,queues,kernel
+4,7448,virtio_net,4,kernel_tag,
+ip_3_addr-info:
+cpu,mem(MB),driver,queues,kernel
+4,7448,virtio_net,4,kernel_tag,
+ip_1_addr-info:
+cpu,mem(MB),driver,queues,kernel
+4,7448,virtio_net,4,kernel_tag,
+2VM->1VM,type,len,threads,rxkB/s,rxpck/s,baseline(pck/s),result
+vhost-4U8G4Q,TCP_RR,1,40*2,18938,289443,279696,pass
+vhost-4U8G4Q,TCP_RR,1024,40*2,286581,269235,258447,pass

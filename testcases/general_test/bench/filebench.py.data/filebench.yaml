@@ -1,0 +1,6 @@
+setup:
+    workloads: !mux
+        filebenchrun_1:
+            testfile : 'fileserver.f'
+        filebenchrun_2:
+            testfile : 'webserver.f'

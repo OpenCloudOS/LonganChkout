@@ -1,0 +1,30 @@
+skip_dangerous: True
+scratch_mnt: '/mnt/scratch'
+test_mnt: '/mnt/test'
+disk_mnt: '/mnt/loop-device'
+# Uncomment and edit test_range for running specific tests
+# test_range: '73,217-415'
+# Run with either loop_type (or) disk_type
+#loop_type: !mux
+    #type: 'loop'
+    #loop_size: '7GiB'
+    # Option to provide disk for loop device creation,
+    # Uses '/' by default for file creation
+    #disk:
+fs_type: !mux
+    fs_ext4:
+        fs: 'ext4'
+        exclude: '025,033,047,049,054'
+        gen_exclude: '044-046,075,112,127,388,389,405,484,569,570,452,524,128,459,323,269,270,311,587,631,643,646,623,627'
+    fs_xfs:
+        fs: 'xfs'
+        # Exclude only if test_range not provided
+        exclude: '007,032,041,052,073,104,116,138,263,288,289,296,432,451,452,500,508,191,030,122,144,145,148,175,512-518,521,528,311-333,344-348,420,421,424,431,438-445,449,450,491-493,503,504,511,065'
+        gen_exclude: '381,389,449,484,523,536,569,570,587,631,643,646,524,128,459,323,269,270,311,623,627'
+        # exclude: '2,4-7,203'
+        # gen_exclude: '1-10,30-45'
+        # share_exclude: '1-2'
+disk_type: !mux
+    type: 'disk'
+    disk_test: /dev/vdb
+    disk_scratch: /dev/vdc

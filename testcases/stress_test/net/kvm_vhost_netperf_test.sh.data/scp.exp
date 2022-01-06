@@ -1,0 +1,175 @@
+#!/usr/bin/expect  -- 
+
+proc Usage_Exit {myself} {
+	puts ""
+	puts "### USAGE:  $myself ip user passwd port sourcefile destdir direction bwlimit timeout"
+	puts ""
+	puts "            sourcefile: a file or directory to be transferred"
+	puts "                        ps 需要拷贝目录时目录名后不要带 /, 否则会拷贝该目录下的所有文件"
+	puts "            destdir:    the location that the sourcefile to be put into"
+	puts "            direction:  pull or push."
+	puts "                        pull: remote -> local"
+	puts "                        push: local -> remote"
+	puts "            bwlimit:    bandwidth limit, kbit/s, 0 means no limit" 
+	puts "            timeout:    timeout of expect, s, -1 means no timeout"
+	puts ""
+	exit 1
+}
+
+if { [llength $argv] < 9 } {
+	Usage_Exit $argv0
+}
+
+set ip [lindex $argv 0]
+set user [lindex $argv 1]
+set passwd [lindex $argv 2]
+set port [lindex $argv 3]
+set sourcefile [lindex $argv 4]
+set destdir [lindex $argv 5]
+set direction [lindex $argv 6]
+set bwlimit [lindex $argv 7]
+set timeoutflag [lindex $argv 8]
+
+set yesnoflag 0
+set timeout $timeoutflag
+
+
+for {} {1} {} {
+
+# for is only used to retry when "Interrupted system call" occured
+
+# scp2: -p Tells scp2 to preserve file attributes and timestamps
+# scp2: -r Copy directories recursively.  Does not follow symbolic links
+# scp2: -Q Do not show process indicator
+
+# rsync: -a, --archive, archive mode, equivalent to -rlptgoD
+# rsync: -r, --recursive, recurse into directories
+# rsync: -t, --times, preserve times
+# rsync: -z, --compress, compress file data
+# rsync: --progress show progress during transfer
+
+# ps 需要拷贝目录时目录名后不要带 /, 否则会拷贝该目录下的所有文件
+
+
+if { $direction == "pull" } {
+
+	if { $bwlimit > 0 } {
+		spawn /usr/bin/rsync -v -artz --bwlimit=$bwlimit -e "ssh -o StrictHostKeyChecking=no -l$user -p$port" $ip:$sourcefile $destdir
+	} elseif { $bwlimit == 0 } {
+		spawn scp -r -p -q $user@$ip:$sourcefile $destdir
+	} else {
+		Usage_Exit $argv0
+	}
+
+} elseif { $direction == "push" } {
+
+	if { $bwlimit > 0 } {
+		spawn /usr/bin/rsync -v -artz --bwlimit=$bwlimit -e "ssh -o StrictHostKeyChecking=no -l$user -p$port" $sourcefile $ip:$destdir
+	} elseif { $bwlimit == 0 } {
+		spawn scp -r -p -q $sourcefile $user@$ip:$destdir
+	} else {
+		Usage_Exit $argv0
+	}
+
+} else {
+	Usage_Exit $argv0
+}
+
+expect 	{
+
+	"assword:" {
+		send "$passwd\r" 
+		break;
+	}
+	
+	"yes/no)?" {
+		set yesnoflag 1
+		send "yes\r"
+		break;
+	}
+	
+	"FATAL" {
+		puts "\nCONNECTERROR: $ip occur FATAL ERROR!!!\n"
+		exit 1
+	}
+	
+	timeout {
+		puts "\nCONNECTERROR: $ip logon TIMEOUT!!!\n"
+		exit 1
+	}
+	
+	"No route to host" {
+		puts "\nCONNECTERROR: $ip No route to host!!!\n"
+		exit 1
+	}
+	
+	"Connection Refused" {
+		puts "\nCONNECTERROR: $ip Connection Refused!!!\n"
+		exit 1
+	}
+
+	"Connection refused" {
+		puts "\nCONNECTERROR: $ip Connection Refused!!!\n"
+		exit 1
+	}
+
+	"Host key verification failed" {
+		puts "\nCONNECTERROR: $ip Host key verification failed!!!\n"
+		exit 1
+	}
+
+    "Destination Unreachable" {
+            puts "\nCONNECTERROR: $ip Destination Unreachable!!!\n"
+            exit 1
+    }
+
+	"Illegal host key" {
+		puts "\nCONNECTERROR: $ip Illegal host key!!!\n"
+		exit 1
+	}
+		
+	"Connection Timed Out" {
+		puts "\nCONNECTERROR: $ip logon TIMEOUT!!!\n"
+		exit 1
+	}
+
+	"Interrupted system call" {
+		puts "\n$ip Interrupted system call!!!\n"
+	}
+}
+
+}
+
+if { $yesnoflag == 1 } {
+	expect {
+		"assword:" {
+			send "$passwd\r"
+		}
+
+		"yes/no)?" {
+			set yesnoflag 2
+			send "yes\r"
+		}
+	}
+}
+
+if { $yesnoflag == 2 } {
+	expect {
+		"assword:" {
+			send "$passwd\r"
+		}
+	}
+}
+
+expect {
+	"assword:" {
+		send "$passwd\r"
+		puts "\nPASSWORDERROR: $ip PASSWORD ERROR!!!\n"
+		exit 1
+	}
+	
+	eof { 
+		puts "ABS_OK_SCP: $ip\n"
+		exit 0;
+	}
+}

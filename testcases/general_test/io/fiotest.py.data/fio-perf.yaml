@@ -1,0 +1,44 @@
+parameters:
+    disk: /dev/vdc
+    fio_job: 'fio-simple.job'
+
+engine: !mux
+    psync:
+        ioengine: 'psync'
+    libaio:
+        ioengine: 'libaio'
+        direct: '1'
+        iodepth: '32'
+    mmap:
+        ioengine: 'mmap'
+
+readwrite: !mux
+    seq:
+        rw: 'rw'
+    rand:
+        rw: 'randrw'
+
+rwmix: !mux
+    read:
+        rwmixread: '100'
+        rwmixwrite: '0'
+    r8w2:
+        rwmixread: '80'
+        rwmixwrite: '20'
+    r5w5:
+        rwmixread: '50'
+        rwmixwrite: '50'
+    r2w8:
+        rwmixread: '20'
+    write:
+        rwmixread: '0'
+        rwmixwrite: '100'
+
+blocksize: !mux
+    size4k:
+        bs: '4k'
+    size128k:
+        bs: '128k'
+    size2M:
+        bs: '2m'
+

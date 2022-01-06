@@ -1,0 +1,12 @@
+3
+plug nic
+vhost_vm1
+Interface attached successfully
+
+plug vhost_vm1 success 13:45:00:bc:9a:12
+Interface attached successfully
+
+plug vhost_vm2 success 13:45:00:bc:9a:13
+Interface attached successfully
+
+plug vhost_vm3 success 13:45:00:bc:9a:14

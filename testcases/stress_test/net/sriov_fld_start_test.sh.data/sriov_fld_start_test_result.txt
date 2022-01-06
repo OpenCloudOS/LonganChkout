@@ -1,0 +1,99 @@
+	     L3 protocol : IPv4
+	     L4 protocol : TCP
+	           debug : 0
+	       target ip : eth1_ipv4_addr
+	        dst port : 37000
+	      thread num : 1
+	        duration : 0 s
+	        pkt size : 64
+	           sleep : 0 ms
+	   prefix length : 0
+	         dst mac : 0:0:0:0:0:0
+	        if index : -1
+	      Flood type :send tcp real ip flood
+main process exit
+
+	     L3 protocol : IPv4
+	     L4 protocol : TCP
+	           debug : 0
+	       target ip : eth1_ipv4_addr
+	        dst port : 37001
+	      thread num : 1
+	        duration : 0 s
+	        pkt size : 10000
+	           sleep : 0 ms
+	   prefix length : 0
+	         dst mac : 0:0:0:0:0:0
+	        if index : -1
+	      Flood type :send tcp real ip flood
+main process exit
+
+	     L3 protocol : IPv4
+	     L4 protocol : UDP
+	           debug : 0
+	       target ip : eth1_ipv4_addr
+	        dst port : 37100
+	      thread num : 1
+	        duration : 0 s
+	        pkt size : 64
+	           sleep : 0 ms
+	   prefix length : 0
+	         dst mac : 0:0:0:0:0:0
+	        if index : -1
+	      Flood type :send udp real ip flood
+main process exit
+
+@@@@@@@@@@@@@@ dmesg check start @@@@@@@@@@@@@@@@
+
+
+
+@@@@@@@@@@@@@@ dmesg check end @@@@@@@@@@@@@@@@
+
+
+%%%%%%%%%%% get raw data start%%%%%%%%%%%%%
+
+top:
+ 3639 root      20   0    7304    644    552 R  81.2  0.0 490:35.15 fld_svr
+12336 root      20   0    7304    104      0 R  56.2  0.0 484:06.73 fld_svr
+12337 root      20   0    7304    104      0 R  50.0  0.0 470:29.47 fld_svr
+
+free -m:
+              total        used        free      shared  buff/cache   available
+Mem:           7471          79        7204          16         187        7151
+Swap:             0           0           0
+
+sar -n DEV 5 2:
+Linux kernel_tag (TENCENT64.site) 	10/30/20 	_x86_64_	(2 CPU)
+
+07:44:04        IFACE   rxpck/s   txpck/s    rxkB/s    txkB/s   rxcmp/s   txcmp/s  rxmcst/s
+07:44:09         eth0     18.40      4.80      1.63      0.94      0.00      0.00      0.00
+07:44:09         eth1 894462.00 331341.60 349664.83 288778.74      0.00      0.00      0.00
+07:44:09           lo      0.00      0.00      0.00      0.00      0.00      0.00      0.00
+
+07:44:09        IFACE   rxpck/s   txpck/s    rxkB/s    txkB/s   rxcmp/s   txcmp/s  rxmcst/s
+07:44:14         eth0     20.60      0.20      1.22      0.01      0.00      0.00      0.00
+07:44:14         eth1 591577.20 196555.20 216740.19 174151.29      0.00      0.00      0.00
+07:44:14           lo      0.00      0.00      0.00      0.00      0.00      0.00      0.00
+
+Average:        IFACE   rxpck/s   txpck/s    rxkB/s    txkB/s   rxcmp/s   txcmp/s  rxmcst/s
+Average:         eth0     19.50      2.50      1.43      0.48      0.00      0.00      0.00
+Average:         eth1 743019.60 263948.40 283202.51 231465.01      0.00      0.00      0.00
+Average:           lo      0.00      0.00      0.00      0.00      0.00      0.00      0.00
+
+%%%%%%%%%%% get raw data end%%%%%%%%%%%%%
+
+
+************** summary start *************
+cpu_avg 62
+mem_free 7204
+rx_pck 743019
+tx_pck 263948
+rx_Mb 2265
+tx_Mb 1851
+************** summary end *************
+
+
+############## Benchmark check start #####################
+############## Benchmark check end #####################
+
+sriov_fld test finish

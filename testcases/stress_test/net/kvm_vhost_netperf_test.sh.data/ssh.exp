@@ -1,0 +1,148 @@
+#!/usr/bin/expect  -- 
+
+if { [llength $argv] < 4 } {
+	puts "### USAGE:  $argv0 ip user passwd port commands timeout"
+	exit 1
+}
+
+match_max 600000
+
+set ip [lindex $argv 0]
+set user [lindex $argv 1]
+set passwd [lindex $argv 2]
+set port [lindex $argv 3]
+set commands [lindex $argv 4]
+set timeoutflag [lindex $argv 5]
+
+set yesnoflag 0
+set timeout $timeoutflag
+
+
+for {} {1} {} {
+# for is only used to retry when "Interrupted system call" occured
+
+spawn ssh -l$user -p$port $ip -o StrictHostKeyChecking=no 
+
+expect 	{
+
+	"assword:" {
+		send "$passwd\r"
+		break;
+	}
+
+	"yes/no)?" {
+		set yesnoflag 1
+		send "yes\r"
+		break;
+	}
+
+	"FATAL" {
+		puts "\nCONNECTERROR: $ip occur FATAL ERROR!!!\n"
+		exit 1
+	}
+
+	timeout {
+		puts "\nCONNECTERROR: $ip logon TIMEOUT!!!\n"
+		exit 1
+	}
+
+	"No route to host" {
+		puts "\nCONNECTERROR: $ip No route to host!!!\n"
+		exit 1
+	}
+
+	"Connection Refused" {
+		puts "\nCONNECTERROR: $ip Connection Refused!!!\n"
+		exit 1
+	}
+
+	"Connection refused" {
+		puts "\nCONNECTERROR: $ip Connection Refused!!!\n"
+		exit 1
+	}
+
+	"Host key verification failed" {
+		puts "\nCONNECTERROR: $ip Host key verification failed!!!\n"
+		exit 1
+	}
+
+	"Illegal host key" {
+		puts "\nCONNECTERROR: $ip Illegal host key!!!\n"
+		exit 1
+	}
+		
+	"Connection Timed Out" {
+		puts "\nCONNECTERROR: $ip logon TIMEOUT!!!\n"
+		exit 1
+	}
+
+	"Destination Unreachable" {
+		puts "\nCONNECTERROR: $ip Destination Unreachable!!!\n"
+		exit 1
+	}
+
+	"Interrupted system call" {
+		puts "\n$ip Interrupted system call!!!\n"
+	}
+}
+}
+
+if { $yesnoflag == 1 } {
+	expect {
+		"assword:" {
+			send "$passwd\r"
+		}
+
+		"yes/no)?" {
+			set yesnoflag 2
+			send "yes\r"
+		}
+	}
+}
+
+if { $yesnoflag == 2 } {
+	expect {
+		"assword:" {
+			send "$passwd\r"
+		}
+	}
+}
+
+expect {
+	"#" {send "$commands \r"}
+	">" {send "$commands \r"}
+	"$" {send "$commands \r"}
+	"@" {send "$commands \r"}
+	"~" {send "$commands \r"}
+	"> " {send "$commands \r"}
+	"$ " {send "$commands \r"}
+	"assword:" {
+		send "$passwd\r"
+		puts "\nPASSWORDERROR: $ip PASSWORD ERROR!!!\n"
+		exit 1
+	}
+}
+
+# expect {
+# 	"#" {send "sleep 1 \r"}
+# 	">" {send "sleep 1 \r"}
+# 	"$" {send "sleep 1 \r"}
+# 	"> " {send "sleep 1 \r"}
+# 	"$ " {send "sleep 1 \r"}
+# }
+
+expect {
+	"#" {send "exit\r"}
+	">" {send "exit\r"}
+	"$" {send "exit\r"}
+	"@" {send "exit\r"}
+	"~" {send "exit\r"}
+	"> " {send "exit\r"}
+	"$ " {send "exit\r"}
+}
+
+expect eof {
+	#puts "ssh ok: $ip\n"
+	exit 0;
+}
+
