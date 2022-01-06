@@ -1,5 +1,5 @@
-# tlinux-autotest-offline
-tlinux-autotest-offline项目用于内核离线压力测试。
+# Longan
+Longan项目用于内核离线自动化压力测试。
 
 # 原理
 本项目基于avocado框架（[https://github.com/avocado-framework/avocado](https://github.com/avocado-framework/avocado)），配套使用avocado测试套件（[https://github.com/avocado-framework-tests/avocado-misc-tests](https://github.com/avocado-framework-tests/avocado-misc-tests)），对内核调度、内存、IO等子系统进行压测。
