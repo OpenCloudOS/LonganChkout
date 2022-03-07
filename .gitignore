@@ -1,0 +1,8 @@
+# package
+avocado-misc-tests-2.0.tar.gz
+patch*.tar
+
+# unused directory
+trash/
+
+tmp/
