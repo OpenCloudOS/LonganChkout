@@ -52,7 +52,7 @@ function exit_cmd()
         fi
 
         echo $exit_info
-        exit $exit_code        
+        exit $exit_code
 }
 
 mountp=`df -h | grep /dev/vdb | awk '{print $6}'`
@@ -67,7 +67,7 @@ mount /dev/vdb /tmp/ext4  > /dev/null
 if [[ ! -f /etc/sysconfig/docker ]]; then
         echo "Not Found /etc/sysconfig/docker"
 elif ! grep -q "ext4" /etc/sysconfig/docker ; then
-	sed -i 's/verification=false/verification=false -g \/tmp\/ext4/' /etc/sysconfig/docker
+        sed -i 's/verification=false/verification=false -g \/tmp\/ext4/' /etc/sysconfig/docker
 fi
 systemctl restart docker  > /dev/null
 docker load -i /data/docker-image/tlinux-64bit-v2.4.20200929.tar  > /dev/null
@@ -91,7 +91,7 @@ declare -a docker_run_cmds=(                                    \
 while true
 do
         for cmd in "${docker_run_cmds[@]}"
-        do      
+        do
                 echo $cmd
                 docker_name=`eval $cmd`
                 docker_name=${docker_name:0:12}
@@ -100,22 +100,31 @@ do
                 docker cp /data/function-test.sh $docker_name:/data/
                 docker exec $docker_name /data/function-test.sh  > /dev/null
                 sleep 1
-                docker stop $docker_name  > /dev/null
+                docker stop $docker_name  > /tmp/docker_stop.log
                 if [ $? -ne 0 ]; then
+                        echo $? >> /tmp/docker_stop.log
+                        cat /tmp/docker_stop.log
                         exit_cmd 1 "docker stop failed"
                 fi
                 sleep 2
-                docker rm $docker_name  > /dev/null
+                docker rm $docker_name  > /tmp/docker_rm.log
                 if [ $? -ne 0 ]; then
+                        echo $? >> /tmp/docker_rm.log
+                        cat /tmp/docker_rm.log
                         exit_cmd 1 "docker rm failed"
                 fi
                 sleep 1
-                umount /tmp/ext4  > /dev/null
+                umount -l /tmp/ext4  > /tmp/umount_ext4.log
                 if [ $? -ne 0 ]; then
+                        echo $? >> /tmp/umount_ext4.log
+                        cat /tmp/umount_ext4.log
+                        fuser -mv /tmp/ext4
                         exit_cmd 1 "umount ext4 failed"
                 fi
-                fsck.ext4 -f -n /dev/vdb  > /dev/null
+                fsck.ext4 -f -n /dev/vdb  > /tmp/fsck_ext4.log
                 if [ $? -ne 0 ]; then
+                        echo $? >> /tmp/fsck_ext4.log
+                        cat /tmp/fsck_ext4.log
                         exit_cmd 1 "fsck.ext4 find error"
                 fi
                 mount /dev/vdb /tmp/ext4  > /dev/null

@@ -67,7 +67,7 @@ mount /dev/vdb /tmp/xfs  > /dev/null
 if [[ ! -f /etc/sysconfig/docker ]]; then
         echo "Not Found /etc/sysconfig/docker"
 elif ! grep -q "xfs" /etc/sysconfig/docker ; then
-	sed -i 's/verification=false/verification=false -g \/tmp\/xfs/' /etc/sysconfig/docker
+        sed -i 's/verification=false/verification=false -g \/tmp\/xfs/' /etc/sysconfig/docker
 fi
 systemctl restart docker  > /dev/null
 docker load -i /data/docker-image/tlinux-64bit-v2.4.20200929.tar  > /dev/null
@@ -91,7 +91,7 @@ declare -a docker_run_cmds=(                                    \
 while true
 do
         for cmd in "${docker_run_cmds[@]}"
-        do      
+        do
                 echo $cmd
                 docker_name=`eval $cmd`
                 docker_name=${docker_name:0:12}
@@ -100,22 +100,31 @@ do
                 docker cp /data/function-test.sh $docker_name:/data/
                 docker exec $docker_name /data/function-test.sh  > /dev/null
                 sleep 1
-                docker stop $docker_name  > /dev/null
+                docker stop $docker_name  > /tmp/docker_stop.log
                 if [ $? -ne 0 ]; then
+                        echo $? >> /tmp/docker_stop.log
+                        cat /tmp/docker_stop.log
                         exit_cmd 1 "docker stop failed"
                 fi
                 sleep 2
-                docker rm $docker_name  > /dev/null
+                docker rm $docker_name  > /tmp/docker_rm.log
                 if [ $? -ne 0 ]; then
+                        echo $? >> /tmp/docker_rm.log
+                        cat /tmp/docker_rm.log
                         exit_cmd 1 "docker rm failed"
                 fi
                 sleep 1
-                umount /tmp/xfs  > /dev/null
+                umount -l /tmp/xfs  > /tmp/umount_xfs.log
                 if [ $? -ne 0 ]; then
+                        echo $? >> /tmp/umount_xfs.log
+                        cat /tmp/umount_xfs.log
+                        fuser -mv /tmp/xfs
                         exit_cmd 1 "umount xfs failed"
                 fi
-                xfs_repair -n /dev/vdb  > /dev/null
+                xfs_repair -n /dev/vdb  > /tmp/xfs_repair.log
                 if [ $? -ne 0 ]; then
+                        echo $? >> /tmp/xfs_repair.log
+                        cat /tmp/xfs_repair.log
                         exit_cmd 1 "xfs_repair find error"
                 fi
                 mount /dev/vdb /tmp/xfs  > /dev/null
