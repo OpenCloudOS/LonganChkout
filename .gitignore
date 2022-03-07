@@ -2,6 +2,9 @@
 avocado-misc-tests-2.0.tar.gz
 patch*.tar
 
+# patch
+*.patch
+
 # unused directory
 trash/
 
